@@ -64,7 +64,7 @@ export default {
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
     const notchEl = createElement(
-      'span',
+      'div',
       {
         class: 'mdc-notched-outline__notch',
         style: this.notchStyles,
@@ -79,10 +79,10 @@ export default {
       ],
     );
 
-    return createElement('span', { class: this.outlinedClasses }, [
-      createElement('span', { class: 'mdc-notched-outline__leading' }),
+    return createElement('div', { class: this.outlinedClasses }, [
+      createElement('div', { class: 'mdc-notched-outline__leading' }),
       notchEl,
-      createElement('span', { class: 'mdc-notched-outline__trailing' }),
+      createElement('div', { class: 'mdc-notched-outline__trailing' }),
     ]);
   },
 };

@@ -1,6 +1,5 @@
 import MDCChipSetFoundation from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
-import { announce } from '@material/dom/announce';
 
 const {
   INTERACTION_EVENT,
@@ -55,9 +54,6 @@ export default {
     // do not delete this reference as it triggers initial chip list instantiation.
     this.chips_;
     this.foundation = new MDCChipSetFoundation({
-      announceMessage: message => {
-        announce(message);
-      },
       focusChipPrimaryActionAtIndex: index => {
         const chip = this.chips_[index];
 
@@ -127,14 +123,14 @@ export default {
         class: this.classes,
         attrs: { role: 'grid' },
         on: {
-          [INTERACTION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipInteraction(detail),
-          [SELECTION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipSelection(detail),
-          [REMOVAL_EVENT]: ({ detail }) =>
-            this.foundation.handleChipRemoval(detail),
-          [NAVIGATION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipNavigation(detail),
+          [INTERACTION_EVENT]: ({ detail: { chipId } }) =>
+            this.foundation.handleChipInteraction(chipId),
+          [SELECTION_EVENT]: ({ detail: { chipId, selected } }) =>
+            this.foundation.handleChipSelection(chipId, selected),
+          [REMOVAL_EVENT]: ({ detail: { chipId } }) =>
+            this.foundation.handleChipRemoval(chipId),
+          [NAVIGATION_EVENT]: ({ detail: { chipId, key, source } }) =>
+            this.foundation.handleChipNavigation(chipId, key, source),
         },
         ref: 'listRoot',
       },

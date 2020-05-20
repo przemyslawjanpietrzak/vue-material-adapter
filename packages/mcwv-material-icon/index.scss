@@ -1,6 +1,8 @@
-@use '@material/ripple/mixins' as ripple-mixins;
+@import '@material/ripple/common';
+@import '@material/ripple/mixins';
 
 .material-icons--ripple-surface {
-    @include ripple-mixins.surface;
-    @include ripple-mixins.radius-bounded();
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states;
 }

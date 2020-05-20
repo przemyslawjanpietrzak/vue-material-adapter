@@ -1,22 +1,22 @@
 {
-  "name": "@mcwv/fab",
-  "description": "The Vue Material Adapter for the web fab component",
+  "name": "@mcwv/grid-list",
+  "description": "The Vue Material Adapter for the web grid-list component",
   "version": "0.14.0",
   "license": "MIT",
-  "main": "dist/mcwv.fab.min.js",
+  "main": "dist/mcwv.gridList.min.js",
   "module": "index.js",
   "keywords": [
     "material components",
     "material design",
     "vue",
-    "fab"
+    "grid-list"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/fab": "^4.0.0",
+    "@material/grid-list": "^4.0.0",
     "@mcwv/base": "^0.14.0",
     "@mcwv/ripple": "^0.14.0"
   },

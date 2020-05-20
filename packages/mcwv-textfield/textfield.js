@@ -8,7 +8,6 @@ import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
 import { RippleBase } from '@mcwv/ripple';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.js';
-import { matches } from '@material/dom/ponyfill';
 
 export default {
   name: 'mcw-textfield',
@@ -58,7 +57,7 @@ export default {
   data: function() {
     return {
       text: this.value,
-      classes: {
+      rootClasses: {
         'mdc-textfield': true,
         'mdc-text-field': true,
         'mdc-text-field--upgraded': true,
@@ -72,7 +71,6 @@ export default {
 
         'mdc-text-field--no-label': !this.label,
       },
-      styles: {},
       inputClasses: {
         'mdc-text-field__input': true,
       },
@@ -129,7 +127,7 @@ export default {
       }
     },
     dense() {
-      this.$set(this.classes, 'mdc-text-field--dense', this.dense);
+      this.$set(this.rootClasses, 'mdc-text-field--dense', this.dense);
     },
     value(value) {
       if (this.foundation) {
@@ -144,10 +142,10 @@ export default {
       Object.assign(
         {
           addClass: className => {
-            this.$set(this.classes, className, true);
+            this.$set(this.rootClasses, className, true);
           },
           removeClass: className => {
-            this.$delete(this.classes, className);
+            this.$delete(this.rootClasses, className);
           },
           hasClass: className => {
             this.$refs.root.classList.contains(className);
@@ -202,26 +200,8 @@ export default {
       this.foundation.setValid(this.valid);
     }
 
-    const isTextArea = this.$refs.root.classList.contains(
-      'mdc-text-field--textarea',
-    );
-    const isOutlined = this.$refs.root.classList.contains(
-      'mdc-text-field--outlined',
-    );
-
-    if (!isTextArea && !isOutlined) {
-      this.ripple = new RippleBase(this, {
-        isSurfaceActive: () => matches(this.$refs.input, ':active'),
-        registerInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
-        },
-        deregisterInteractionHandler: (evtType, handler) =>
-          this.$refs.input.removeEventListener(
-            evtType,
-            handler,
-            applyPassive(),
-          ),
-      });
+    if (this.textbox) {
+      this.ripple = new RippleBase(this);
       this.ripple.init();
     }
   },
@@ -341,13 +321,6 @@ export default {
       );
     } else {
       rootNodes.push(
-        createElement('span', {
-          class: 'mdc-text-field__ripple',
-
-          ref: 'ripple',
-        }),
-      );
-      rootNodes.push(
         createElement('input', {
           class: this.inputClasses,
           attrs: {
@@ -359,7 +332,6 @@ export default {
             placeholder: this.inputPlaceHolder,
             'aria-label': this.inputPlaceHolder,
             'aria-controls': this.inputAriaControls,
-            'aria-labelledby': `label-${this.vma_uid_}`,
           },
           ref: 'input',
           on: {
@@ -375,7 +347,7 @@ export default {
         createElement(
           mcwFloatingLabel,
           {
-            attrs: { id: `label-${this.vma_uid_}` },
+            attrs: { for: this.vma_uid_ },
             ref: 'labelEl',
           },
           this.label,
@@ -417,10 +389,9 @@ export default {
     }
 
     const rootEl = createElement(
-      'label',
+      'div',
       {
-        class: this.classes,
-        style: this.styles,
+        class: this.rootClasses,
         ref: 'root',
       },
       rootNodes,

@@ -5,7 +5,6 @@ import { closest, matches } from '@material/dom/ponyfill';
 import { VMAUniqueIdMixin } from '@mcwv/base';
 import { mcwButton } from '@mcwv/button/index.js';
 import { cssClasses, LAYOUT_EVENTS } from './constants';
-import { FocusTrap } from '@material/dom/focus-trap';
 
 export default {
   name: 'mcw-dialog',
@@ -49,8 +48,6 @@ export default {
       `[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`,
     );
 
-    this.focusTrapFactory_ = el => new FocusTrap(el);
-
     const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
@@ -58,8 +55,8 @@ export default {
       addBodyClass: className => document.body.classList.add(className),
       removeBodyClass: className => document.body.classList.remove(className),
       eventTargetMatches: (target, selector) => matches(target, selector),
-      trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.trapFocus(),
-      releaseFocus: () => this.focusTrap && this.focusTrap.releaseFocus(),
+      trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.activate(),
+      releaseFocus: () => this.focusTrap && this.focusTrap.deactivate(),
       getInitialFocusEl: () => this.getInitialFocusEl_(),
       isContentScrollable: () =>
         !!this.$refs.contentEl && util.isScrollable(this.$refs.contentEl),
@@ -149,7 +146,7 @@ export default {
         if (this.$refs.container) {
           this.focusTrap = util.createFocusTrapInstance(
             this.$el,
-            this.focusTrapFactory_,
+            void 0,
             this.getInitialFocusEl_() || void 0,
           );
         }
@@ -240,6 +237,10 @@ export default {
         style: this.styles,
         attrs: {
           id: this.id,
+          'aria-modal': 'true',
+          'aria-labelledby': this.labelledBy,
+          'aria-describedby': this.describedBy,
+          role: 'alertdialog',
         },
         ref: 'root',
         on: {
@@ -257,15 +258,7 @@ export default {
           [
             createElement(
               'div',
-              {
-                class: cssClasses.SURFACE,
-                attrs: {
-                  'aria-modal': 'true',
-                  'aria-labelledby': this.labelledBy,
-                  'aria-describedby': this.describedBy,
-                  role: 'alertdialog',
-                },
-              },
+              { class: cssClasses.SURFACE },
               this.$scopedSlots.default && this.$scopedSlots.default(),
             ),
           ],

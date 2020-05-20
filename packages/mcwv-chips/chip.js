@@ -224,7 +224,7 @@ export default {
 
         trailingAction && trailingAction.focus();
       },
-      getAttribute: attr => this.$el.getAttribute(attr),
+
       getCheckmarkBoundingClientRect: () => {
         return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.width : null;
       },
@@ -259,11 +259,11 @@ export default {
           },
           true,
         ),
-      notifyRemoval: removedAnnouncement => {
+      notifyRemoval: () => {
         emitCustomEvent(
           this.$el,
           REMOVAL_EVENT,
-          { chipId: this.id, root: this.$el, removedAnnouncement },
+          { chipId: this.id, root: this.$el },
           true,
         );
       },

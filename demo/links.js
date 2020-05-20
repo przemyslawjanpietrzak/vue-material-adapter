@@ -42,6 +42,7 @@ export default [
   link('dialog', icDialog),
   link('drawer', icSideNavigation),
   link('fab', icButton, 'FAB', 'Floating Action Button'),
+  link('grid-list', icCard),
   link('icon-button', icComponent),
   link('layout-grid', icResponsiveLayout, 'Grid Layout'),
   link('linear-progress', icProgressActivity),
